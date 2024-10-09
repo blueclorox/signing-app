@@ -1,0 +1,1 @@
+const authRepository = require('../src/repositories/auth.repository')
