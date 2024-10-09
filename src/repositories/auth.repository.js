@@ -1,4 +1,4 @@
-class AuthRepository{
+export class AuthRepository{
 
 }
 
