@@ -3,9 +3,11 @@ import { MESSAGES } from "../constants/message.constants.js";
 import AuthService from "../services/auth.service.js";
 
 export class AuthController{   
-    authService = new AuthService();
+    constructor(authService = new AuthService()){
+        this.authService = authService
+    };
 
-    // 회원가입
+    //회원가입
     signUp = async (req, res, next) => {
         try {
           // 작성 정보 받아오기
@@ -27,7 +29,9 @@ export class AuthController{
             user
           })
           }catch (error) {
-          next(error);
+          return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+            message: MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+          });
         }
       };
 
@@ -46,7 +50,9 @@ export class AuthController{
             token: loginResult
           })
         }  catch (error) {
-           next(error);
+            return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+                message: MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+              });
         }
     };
 }
