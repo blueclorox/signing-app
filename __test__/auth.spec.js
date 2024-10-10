@@ -24,6 +24,16 @@ describe('Auth 테스트 시나리오', () => {
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: '비밀번호가 입력되지 않았습니다.' }));
       });
+
+      test('가입되지 않은 유저 테스트', async () => {
+        const req = { body: { username: 'testuser', password: 'testpass' } }; // 비밀번호가 누락된 경우
+        const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  
+        await authController.signUp(req, res);
+  
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: '가입되지 않은 유저입니다.' }));
+      });
     });
   
     describe('로그인', () => {
