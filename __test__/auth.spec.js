@@ -53,7 +53,7 @@ describe('Auth 테스트 시나리오', () => {
   
         await authController.signUp(req, res);
   
-        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.status).toHaveBeenCalledWith(409);
         expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: '이미 가입된 사용자입니다.' }));
       });
     });
