@@ -1,4 +1,7 @@
 export const MESSAGES = {
+    COMMON:{
+        INTERNAL_SERVER_ERROR:'예기지 않은 오류가 발생했습니다.'
+    },
     AUTH: {
         SIGN_UP:{
             CREATED: '회원가입에 성공했습니다.',
