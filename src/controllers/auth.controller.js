@@ -7,7 +7,7 @@ export class AuthController{
         this.authService = authService
     };
 
-    // 회원가입
+    //회원가입
     signUp = async (req, res, next) => {
         try {
           // 작성 정보 받아오기
