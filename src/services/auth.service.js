@@ -1,14 +1,15 @@
-import { HTTP_STATUS } from "../constants/http-status.constants";
-import { MESSAGES } from "../constants/message.constants";
-import { HttpError } from "../util/http-error.util";
+import { MESSAGES } from "../constants/message.constants.js";
+import AuthRepository from "../repositories/auth.repository.js";
+import AuthorityRepository from "../repositories/authority.repository.js";
+import UserRepository from "../repositories/user.repository.js";
+import { generateAccessToken } from "../util/auth.util.js";
+import { HttpError } from "../util/http-error.util.js";
 
 
 class AuthService{
-    constructor(authRepository, userRepository, authorityRepository){
-        this.authRepository = authRepository
-        this.userRepository = userRepository
-        this.authorityRepository = authorityRepository
-    }
+    authRepository = new AuthRepository()
+    userRepository = new UserRepository()
+    authorityRepository = new AuthorityRepository()
 
   // 회원가입
   signUp = async ({ username, password, nickname }) => {
@@ -18,26 +19,19 @@ class AuthService{
       throw new HttpError.Conflict(MESSAGES.AUTH.SIGN_UP.CONFLICT);
     }
 
-    // Transaction 시작
-    const createdUser = await this.userRepository.createTransaction(async (tx) => {
-      // user 생성하기
-      const user = await this.userRepository.create(
-        {
-          email,
-          password,
-          nickname,
-        },
-        { tx },
-      );
+    // user 생성하기
+    const user = await this.userRepository.create(
+      { username, password, nickname }
+    );
 
-      // authority 부여
-      await this.authorityRepository.create(user.id, { tx });
-
-      return user;
-    });
+    // authority 부여
+    await this.authorityRepository.create(user.id);
 
     // password 제외하기
-    const { password: _, ...userWithoutPassword } = createdUser;
+    const userWithoutPassword = {
+        username: user.username,
+        nickname: user.nickname,
+    }
 
     return userWithoutPassword;
   };
@@ -46,14 +40,17 @@ class AuthService{
     login = async ({username, password}) => {
         try {
           // user 찾아오기
-          const user = await this.authService.signIn(username, password);
-    
-          // 성공 메세지 반환
-          res.status(HTTP_STATUS.OK).json({
-            status: HTTP_STATUS.OK,
-            message: MESSAGES.AUTH.LOGIN.SUCCEED,
-            data: user,
-          });
+          const user = await this.authRepository.getByName( username );
+            
+          // 비밀번호 검증
+          if(user.password != password){
+            throw new HttpError.Unauthorized(MESSAGES.AUTH.LOGIN.UNAUTHORIZED)
+          }
+
+          const token = await generateAccessToken()
+
+          return token
+
         } catch (error) {
           next(error);
         }

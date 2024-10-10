@@ -1,10 +1,9 @@
-import { HTTP_STATUS } from "../constants/http-status.constants";
-import { MESSAGES } from "../constants/message.constants";
+import { HTTP_STATUS } from "../constants/http-status.constants.js";
+import { MESSAGES } from "../constants/message.constants.js";
+import AuthService from "../services/auth.service.js";
 
 export class AuthController{   
-    constructor(authService){
-        this.authService = authService
-    }
+    authService = new AuthService();
 
     // 회원가입
     signUp = async (req, res, next) => {
@@ -29,7 +28,6 @@ export class AuthController{
           }catch (error) {
           next(error);
         }
-        return;
       };
 
     //로그인
