@@ -20,6 +20,7 @@ export class AuthController{
     
           // 성공 메세지 반환
           return res.status(HTTP_STATUS.CREATED).json({
+            // 원래 작성 해뒀지만 원하는 값이 존재하는 듯 하여 주석 처리 해두었습니다.
             // status:HTTP_STATUS.CREATED,
             // message:MESSAGES.AUTH.SIGN_UP.CREATED,
             // data: user
