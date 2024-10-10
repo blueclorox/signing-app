@@ -28,32 +28,32 @@ class AuthService{
     await this.authorityRepository.create(user.id);
 
     // password 제외하기
-    const userWithoutPassword = {
-        username: user.username,
-        nickname: user.nickname,
+    const createdUser = await this.userRepository.getByName( username )
+
+    const responseData = {
+        username: createdUser.username,
+        nickname: createdUser.nickname,
+        authorities: createdUser.authorities
     }
 
-    return userWithoutPassword;
+    return responseData;
   };
 
     // 로그인
     login = async ({username, password}) => {
-        try {
           // user 찾아오기
-          const user = await this.authRepository.getByName( username );
+          const user = await this.userRepository.getByName( username );
             
           // 비밀번호 검증
           if(user.password != password){
             throw new HttpError.Unauthorized(MESSAGES.AUTH.LOGIN.UNAUTHORIZED)
           }
 
-          const token = await generateAccessToken()
+          const payload = { userid: user.id }
+
+          const token = await generateAccessToken(payload)
 
           return token
-
-        } catch (error) {
-          next(error);
-        }
       };
 }
 

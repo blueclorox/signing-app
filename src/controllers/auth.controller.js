@@ -20,11 +20,11 @@ export class AuthController{
     
           // 성공 메세지 반환
           return res.status(HTTP_STATUS.CREATED).json({
-            status:HTTP_STATUS.CREATED,
-            message:MESSAGES.AUTH.SIGN_UP.CREATED,
-            data: user
+            // status:HTTP_STATUS.CREATED,
+            // message:MESSAGES.AUTH.SIGN_UP.CREATED,
+            // data: user
+            user
           })
-
           }catch (error) {
           next(error);
         }
@@ -39,11 +39,11 @@ export class AuthController{
           const loginResult = await this.authService.login({ username, password})
 
           return res.status(HTTP_STATUS.OK).json({
-            status:HTTP_STATUS.OK,
-            message:MESSAGES.AUTH.LOGIN.SUCCEED,
-            data: loginResult
+            // status:HTTP_STATUS.OK,
+            // message:MESSAGES.AUTH.LOGIN.SUCCEED,
+            // data: loginResult
+            token: loginResult
           })
-
         }  catch (error) {
            next(error);
         }

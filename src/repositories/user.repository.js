@@ -3,7 +3,16 @@ import { prisma } from '../util/prisma.util.js'
 export class UserRepository {
 
   getByName = async ( username ) => {
-    const user = await prisma.user.findUnique({ where: { username }})
+    const user = await prisma.user.findUnique({ 
+        where: { username },
+        include: { 
+            authorities: {
+                select: {
+                    authorityName: true,
+                }
+            }
+        }
+    })
 
     return user
   }

@@ -21,8 +21,8 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  refreshToken  Auth?
-  authorityName Authority[]
+  refreshToken Auth?
+  authorities  Authority[]
 
   @@map("users")
 }
@@ -40,10 +40,10 @@ model Auth {
 }
 
 model Authority {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  role      Role     @default(ROLE_USER) @map("role")
-  createdAt DateTime @default(now()) @map("created_at")
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  authorityName Role     @default(ROLE_USER) @map("authority_name")
+  createdAt     DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
