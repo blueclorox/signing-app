@@ -1,4 +1,5 @@
 import { HTTP_STATUS } from "../constants/http-status.constants.js";
+import { MESSAGES } from "../constants/message.constants.js";
 
 const errorHandler = (err, req, res, next) => {
     switch (err.name) {
@@ -6,13 +7,13 @@ const errorHandler = (err, req, res, next) => {
       case 'TokenExpiredError':
         return res.status(HTTP_STATUS.UNAUTHORIZED).json({
           status: HTTP_STATUS.UNAUTHORIZED,
-          message: MESSAGES.AUTH.COMMON.JWT.EXPIRED,
+          message: MESSAGES.AUTH.JWT.EXPIRED,
         });
   
       case 'JsonWebTokenError':
         return res.status(HTTP_STATUS.UNAUTHORIZED).json({
           status: HTTP_STATUS.UNAUTHORIZED,
-          message: MESSAGES.AUTH.COMMON.JWT.INVALID,
+          message: MESSAGES.AUTH.JWT.INVALID,
         });
   
       // HttpError와 그 밖의 예상치 못한 에러 처리
@@ -20,7 +21,7 @@ const errorHandler = (err, req, res, next) => {
         console.log(err);
         return res.status(err.status || HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
           status: err.status || HTTP_STATUS.INTERNAL_SERVER_ERROR,
-          message: err.message || '예상치 못한 에러가 발생했습니다. 관리자에게 문의해 주세요.',
+          message: err.message || MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
         });
     }
   };

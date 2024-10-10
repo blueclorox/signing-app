@@ -29,9 +29,7 @@ export class AuthController{
             user
           })
           }catch (error) {
-          return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-            message: MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
-          });
+          next(error)
         }
       };
 
@@ -47,13 +45,14 @@ export class AuthController{
             // status:HTTP_STATUS.OK,
             // message:MESSAGES.AUTH.LOGIN.SUCCEED,
             // data: loginResult
-            token: loginResult
+            token: {
+                accessToken: loginResult.accessToken,
+                refreshToken: loginResult.refreshToken
+            }
           })
         }  catch (error) {
-            return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-                message: MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
-              });
-        }
+            next(error)
+        };
     };
 }
 
